@@ -9,6 +9,7 @@ import sys
 import textwrap
 
 from bwm import solve_bwm
+from aggregation import aggregate_weights
 
 sg.theme("PythonPlus")
 sg.set_options(input_text_color='white', button_color=("white", "#0078D4"))
@@ -551,12 +552,21 @@ for decisor in range(1, d + 1):
     except Exception as e:
         sg.popup_error(f"❌ Error solving BWM for DM#{decisor}:\n{e}")
         sys.exit()
-weights_array = np.array(all_weights).T
-geom_means = np.prod(weights_array, axis=1) ** (1 / weights_array.shape[1])
-geom_means /= np.sum(geom_means)
-weight_str = "\n".join([f"{criteria[i]}: {geom_means[i]:.4f}" for i in range(len(criteria))])
-sg.popup_scrolled(f"📊 Aggregated Final Weights (Geometric Mean):\n{weight_str}",
-                  title="Group BWM Result")
+        
+geom_means = aggregate_weights(all_weights)
+
+weight_str = "\n".join(
+    [
+        f"{criteria[i]}: {geom_means[i]:.4f}"
+        for i in range(len(criteria))
+    ]
+)
+
+sg.popup_scrolled(
+    f"📊 Aggregated Final Weights (Geometric Mean):\n{weight_str}",
+    title="Group BWM Result",
+)
+
 def_weights = geom_means
 
 while test != "error":
