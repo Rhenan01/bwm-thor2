@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it using the metadata below."
+
+title: "BWM–THOR2"
+type: software
+
+authors:
+  - family-names: "Santos"
+    given-names: "Rhenan Silva dos"
+
+  - family-names: "Tenório"
+    given-names: "Fabricio Maione"
+
+  - family-names: "Souza"
+    given-names: "Lucas Rocha de"
+
+repository-code: "https://github.com/Rhenan01/bwm-thor2"
+
+abstract: >
+  Computational implementation of BWM–THOR2, a hybrid multicriteria
+  decision-aiding architecture integrating the Best–Worst Method for
+  criteria weighting with THOR2 for alternative evaluation and ranking.
+
+keywords:
+  - MCDA
+  - MCDM
+  - Best-Worst Method
+  - BWM
+  - THOR2
+  - outranking
+  - decision aid
+  - operations research
