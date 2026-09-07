@@ -3,7 +3,12 @@ from thor2 import (
     scenario_s1,
     scenario_s2,
     scenario_s3,
+    discordance_s1,
+    discordance_s2,
+    discordance_s3,
 )
+
+import pytest
 
 
 def test_strict_preference_a_over_b():
@@ -237,3 +242,163 @@ def test_thor2_scenario_s3_reference_case():
     )
 
     assert result == "dominates"
+
+def test_discordance_s1_reference_case():
+    differences = [5.0, 2.0, 0.5, -0.5, -2.0, -5.0]
+
+    relations = [
+        "aPb",
+        "aQb",
+        "aIb",
+        "bIa",
+        "bQa",
+        "bPa",
+    ]
+
+    pertinences = [1.0] * 6
+
+    weights = [
+        0.30,
+        0.20,
+        0.15,
+        0.10,
+        0.10,
+        0.15,
+    ]
+
+    preference_thresholds = [3.0] * 6
+    indifference_thresholds = [1.0] * 6
+    discordance_thresholds = [10.0] * 6
+
+    result = discordance_s1(
+        differences,
+        relations,
+        pertinences,
+        weights,
+        preference_thresholds,
+        indifference_thresholds,
+        discordance_thresholds,
+    )
+
+    assert result == pytest.approx(0.375, abs=1e-9)
+
+
+def test_discordance_s2_reference_case():
+    differences = [5.0, 2.0, 0.5, -0.5, -2.0, -5.0]
+
+    relations = [
+        "aPb",
+        "aQb",
+        "aIb",
+        "bIa",
+        "bQa",
+        "bPa",
+    ]
+
+    pertinences = [1.0] * 6
+
+    weights = [
+        0.30,
+        0.20,
+        0.15,
+        0.10,
+        0.10,
+        0.15,
+    ]
+
+    preference_thresholds = [3.0] * 6
+    indifference_thresholds = [1.0] * 6
+    discordance_thresholds = [10.0] * 6
+
+    result = discordance_s2(
+        differences,
+        relations,
+        pertinences,
+        weights,
+        preference_thresholds,
+        indifference_thresholds,
+        discordance_thresholds,
+    )
+
+    assert result == pytest.approx(0.5625, abs=1e-9)
+
+
+def test_discordance_s3_reference_case():
+    differences = [5.0, 2.0, 0.5, -0.5, -2.0, -5.0]
+
+    relations = [
+        "aPb",
+        "aQb",
+        "aIb",
+        "bIa",
+        "bQa",
+        "bPa",
+    ]
+
+    pertinences = [1.0] * 6
+
+    weights = [
+        0.30,
+        0.20,
+        0.15,
+        0.10,
+        0.10,
+        0.15,
+    ]
+
+    preference_thresholds = [3.0] * 6
+    indifference_thresholds = [1.0] * 6
+    discordance_thresholds = [10.0] * 6
+
+    result = discordance_s3(
+        differences,
+        relations,
+        pertinences,
+        weights,
+        preference_thresholds,
+        indifference_thresholds,
+        discordance_thresholds,
+    )
+
+    assert result == pytest.approx(0.71875, abs=1e-9)
+
+def test_discordance_s1_returns_half_when_threshold_is_reached():
+    result = discordance_s1(
+        differences=[5.0, -2.0],
+        relations=["aPb", "bQa"],
+        pertinences=[1.0, 1.0],
+        weights=[0.6, 0.4],
+        preference_thresholds=[3.0, 3.0],
+        indifference_thresholds=[1.0, 1.0],
+        discordance_thresholds=[10.0, 2.0],
+    )
+
+    assert result == pytest.approx(0.5, abs=1e-9)
+
+
+def test_discordance_s2_returns_half_when_threshold_is_reached():
+    result = discordance_s2(
+        differences=[5.0, -2.0],
+        relations=["aPb", "bQa"],
+        pertinences=[1.0, 1.0],
+        weights=[0.6, 0.4],
+        preference_thresholds=[3.0, 3.0],
+        indifference_thresholds=[1.0, 1.0],
+        discordance_thresholds=[10.0, 2.0],
+    )
+
+    assert result == pytest.approx(0.5, abs=1e-9)
+
+
+def test_discordance_s3_returns_half_when_threshold_is_reached():
+    result = discordance_s3(
+        differences=[5.0, -2.0],
+        relations=["aPb", "bQa"],
+        pertinences=[1.0, 1.0],
+        weights=[0.6, 0.4],
+        preference_thresholds=[3.0, 3.0],
+        indifference_thresholds=[1.0, 1.0],
+        discordance_thresholds=[10.0, 2.0],
+    )
+
+    assert result == pytest.approx(0.5, abs=1e-9)

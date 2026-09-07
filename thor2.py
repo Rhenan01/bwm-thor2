@@ -270,3 +270,272 @@ def scenario_s3(
         return "dominates"
 
     return "does not dominate"
+
+def discordance_s1(
+    differences,
+    relations,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+    discordance_thresholds,
+):
+    """
+    Calculate the THOR2 discordance evaluation for scenario S1.
+    """
+
+    support = 0.0
+    opposition = 0.0
+    discordance_detected = False
+
+    for i in range(len(weights)):
+        if weights[i] == 0:
+            continue
+
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+    if discordance_detected:
+        return 0.5
+
+    return support / (opposition + support)
+
+
+def discordance_s2(
+    differences,
+    relations,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+    discordance_thresholds,
+):
+    """
+    Calculate the THOR2 discordance evaluation for scenario S2.
+    """
+
+    support = 0.0
+    opposition = 0.0
+    discordance_detected = False
+
+    for i in range(len(weights)):
+        if weights[i] == 0:
+            continue
+
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            support += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+    if discordance_detected:
+        return 0.5
+
+    return support / (opposition + support)
+
+
+def discordance_s3(
+    differences,
+    relations,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+    discordance_thresholds,
+):
+    """
+    Calculate the THOR2 discordance evaluation for scenario S3.
+    """
+
+    support = 0.0
+    opposition = 0.0
+    discordance_detected = False
+
+    for i in range(len(weights)):
+        if weights[i] == 0:
+            continue
+
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            support += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            support += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            support += weights[i] * 0.5 * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (
+                            abs(differences[i])
+                            - indifference_thresholds[i]
+                        )
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+            if abs(differences[i]) >= discordance_thresholds[i]:
+                discordance_detected = True
+
+    if discordance_detected:
+        return 0.5
+
+    return support / (opposition + support)
