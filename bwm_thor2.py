@@ -15,6 +15,9 @@ from thor2 import (
     scenario_s1,
     scenario_s2,
     scenario_s3,
+    discordance_s1,
+    discordance_s2,
+    discordance_s3,
 )
 
 sg.theme("PythonPlus")
@@ -110,9 +113,6 @@ weight = [];
 weight2 = [];
 weight3 = [];
 weight4 = [];
-ms1 = 0;
-ms2 = 0;
-ms3 = 0;
 p = [];
 q = [];
 d = [];
@@ -248,105 +248,6 @@ def negative_test(a):
 def dotcomma(a):
     d = a.strip().replace(",", ".")
     return d
-
-
-def discordances1(a, b, c):
-    count1 = 0
-    sum1 = 0
-    Sumt = 0
-    for i in range(cri):
-        if not weight[i] == 0:
-            if b[i] == "aPb":
-                sum1 += weight[i] * c[i]
-            elif b[i] == "aQb":
-                Sumt += abs(weight[i] * c[i] * (((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-            elif b[i] == "aIb":
-                Sumt += weight[i] * 0.5 * c[i]
-            elif b[i] == "bIa":
-                Sumt += weight[i] * 0.5 * c[i]
-                if abs(a[i]) >= d[i]:
-                    count1 += 1
-            elif b[i] == "bQa":
-                Sumt += abs(weight[i] * c[i] * (((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-                if abs(a[i]) >= d[i]:
-                    count1 += 1
-            elif b[i] == "bPa":
-                Sumt += weight[i] * c[i]
-                if abs(a[i]) >= d[i]:
-                    count1 += 1
-    global ms1
-    if count1 > 0:
-        ms1 = round(0.50, 3)
-        return ms1
-    else:
-        ms1 = (sum1 / (Sumt + sum1))
-        return ms1
-
-
-def discordances2(a, b, c):
-    cont2 = 0
-    sum1 = 0
-    Sumt = 0
-    for i in range(cri):
-        if not weight[i] == 0:
-            if b[i] == "aPb":
-                sum1 += weight[i] * c[i]
-            elif b[i] == "aQb":
-                sum1 += abs(weight[i] * c[i] * (((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-            elif b[i] == "aIb":
-                Sumt += weight[i] * 0.5 * c[i]
-            elif b[i] == "bIa":
-                Sumt += weight[i] * 0.5 * c[i]
-                if abs(a[i]) >= d[i]:
-                    cont2 += 1
-            elif b[i] == "bQa":
-                Sumt += abs(weight[i] * c[i] * (((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-                if abs(a[i]) >= d[i]:
-                    cont2 += 1
-            elif b[i] == "bPa":
-                Sumt += weight[i] * c[i]
-                if abs(a[i]) >= d[i]:
-                    cont2 += 1
-    global ms2
-    if cont2 > 0:
-        ms2 = round(0.50, 3)
-        return ms2
-    else:
-        ms2 = (sum1 / (Sumt + sum1))
-        return ms2
-
-
-def discordances3(a, b, c):
-    cont3 = 0
-    sum1 = 0
-    Sumt = 0
-    for i in range(cri):
-        if not weight[i] == 0:
-            if b[i] == "aPb":
-                sum1 += weight[i] * c[i]
-            elif b[i] == "aQb":
-                sum1 += abs(weight[i] * c[i] * (((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-            elif b[i] == "aIb":
-                sum1 += weight[i] * 0.5 * c[i]
-            elif b[i] == "bIa":
-                sum1 += weight[i] * 0.5 * c[i]
-                if abs(a[i]) >= d[i]:
-                    cont3 += 1
-            elif b[i] == "bQa":
-                Sumt += abs(weight[i] * c[i] * ((((abs(a[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5))
-                if abs(a[i]) >= d[i]:
-                    cont3 += 1
-            elif b[i] == "bPa":
-                Sumt += weight[i] * c[i]
-                if abs(a[i]) >= d[i]:
-                    cont3 += 1
-    global ms3
-    if cont3 > 0:
-        ms3 = round(0.50, 3)
-        return ms3
-    else:
-        ms3 = (sum1 / (Sumt + sum1))
-        return ms3
 
 def ind(a, b, c):
     x = float((a + b + c) / 3)
@@ -870,24 +771,43 @@ while meter < 1:
                     p,
                     q,
                 )
+                d1_ab = discordance_s1(
+                    b,
+                    c,
+                    g,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
+
+                d1_ba = discordance_s1(
+                    f,
+                    e,
+                    h,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
                 if (s1_ab == "dominates") and (s1_ba == "dominates"):
-                    if (discordances1(b, c, g) == 0.5) or (discordances1(f, e, h) == 0.5):
+                    if (d1_ab == 0.5) or (d1_ba == 0.5):
                         matrixs1[i][j] = 0.5
                         matrixs1[j][i] = 0.5
                     else:
-                        matrixs1[i][j] = round(discordances1(b, c, g), 3)
-                        matrixs1[j][i] = round(discordances1(f, e, h), 3)
+                        matrixs1[i][j] = round(d1_ab, 3)
+                        matrixs1[j][i] = round(d1_ba, 3)
                 elif (s1_ab == "dominates") and (s1_ba != "dominates"):
-                    if (discordances1(b, c, g) != 0.5):
-                        matrixs1[i][j] = round(ms1, 3)
+                    if (d1_ab != 0.5):
+                        matrixs1[i][j] = round(d1_ab, 3)
                         matrixs1[j][i] = 0
                     else:
                         matrixs1[i][j] = 0.5
                         matrixs1[j][i] = 0.5
                 elif (s1_ab != "dominates") and (s1_ba == "dominates"):
-                    if (discordances1(f, e, h) != 0.5):
+                    if (d1_ba != 0.5):
                         matrixs1[i][j] = 0
-                        matrixs1[j][i] = round(ms1, 3)
+                        matrixs1[j][i] = round(d1_ba, 3)
                     else:
                         matrixs1[i][j] = 0.5
                         matrixs1[j][i] = matrixs1[i][j]
@@ -1024,24 +944,43 @@ while meter < 1:
                     p,
                     q,
                 )
+                d2_ab = discordance_s2(
+                    b,
+                    c,
+                    g,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
+
+                d2_ba = discordance_s2(
+                    f,
+                    e,
+                    h,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
                 if (s2_ab == "dominates") and (s2_ba == "dominates"):
-                    if (discordances2(b, c, g) == 0.5) or (discordances2(f, e, h) == 0.5):
+                    if (d2_ab == 0.5) or (d2_ba == 0.5):
                         matrixs2[i][j] = 0.5
                         matrixs2[j][i] = 0.5
                     else:
-                        matrixs2[i][j] = round(discordances2(b, c, g), 3)
-                        matrixs2[j][i] = round(discordances2(f, e, h), 3)
+                        matrixs2[i][j] = round(d2_ab, 3)
+                        matrixs2[j][i] = round(d2_ba, 3)
                 elif (s2_ab == "dominates") and (s2_ba != "dominates"):
-                    if (discordances2(b, c, g) != 0.5):
-                        matrixs2[i][j] = round(ms2, 3)
+                    if (d2_ab != 0.5):
+                        matrixs2[i][j] = round(d2_ab, 3)
                         matrixs2[j][i] = 0
                     else:
                         matrixs2[i][j] = 0.5
                         matrixs2[j][i] = 0.5
                 elif (s2_ab != "dominates") and (s2_ba == "dominates"):
-                    if (discordances2(f, e, h) != 0.5):
+                    if (d2_ba != 0.5):
                         matrixs2[i][j] = 0
-                        matrixs2[j][i] = round(ms2, 3)
+                        matrixs2[j][i] = round(d2_ba, 3)
                     else:
                         matrixs2[i][j] = 0.5
                         matrixs2[j][i] = matrixs2[i][j]
@@ -1178,24 +1117,43 @@ while meter < 1:
                     p,
                     q,
                 )
+                d3_ab = discordance_s3(
+                    b,
+                    c,
+                    g,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
+
+                d3_ba = discordance_s3(
+                    f,
+                    e,
+                    h,
+                    weight,
+                    p,
+                    q,
+                    d,
+                )
                 if (s3_ab == "dominates") and (s3_ba == "dominates"):
-                    if (discordances3(b, c, g) == 0.5) or (discordances3(f, e, h) == 0.5):
+                    if (d3_ab == 0.5) or (d3_ba == 0.5):
                         matrixs3[i][j] = 0.5
                         matrixs3[j][i] = 0.5
                     else:
-                        matrixs3[i][j] = round(discordances3(b, c, g), 3)
-                        matrixs3[j][i] = round(discordances3(f, e, h), 3)
+                        matrixs3[i][j] = round(d3_ab, 3)
+                        matrixs3[j][i] = round(d3_ba, 3)
                 elif (s3_ab == "dominates") and (s3_ba != "dominates"):
-                    if (discordances3(b, c, g) != 0.5):
-                        matrixs3[i][j] = round(ms3, 3)
+                    if (d3_ab != 0.5):
+                        matrixs3[i][j] = round(d3_ab, 3)
                         matrixs3[j][i] = 0
                     else:
                         matrixs3[i][j] = 0.5
                         matrixs3[j][i] = 0.5
                 elif (s3_ab != "dominates") and (s3_ba == "dominates"):
-                    if (discordances3(f, e, h) != 0.5):
+                    if (d3_ba != 0.5):
                         matrixs3[i][j] = 0
-                        matrixs3[j][i] = round(ms3, 3)
+                        matrixs3[j][i] = round(d3_ba, 3)
                     else:
                         matrixs3[i][j] = 0.5
                         matrixs3[j][i] = matrixs3[i][j]
@@ -1353,24 +1311,43 @@ if usetca != 1:
                         p,
                         q,
                     )
+                    d1_ab = discordance_s1(
+                        b,
+                        c,
+                        g,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
+
+                    d1_ba = discordance_s1(
+                        f,
+                        e,
+                        h,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
                     if (s1_ab == "dominates") and (s1_ba == "dominates"):
-                        if (discordances1(b, c, g) == 0.5) or (discordances1(f, e, h) == 0.5):
+                        if (d1_ab == 0.5) or (d1_ba == 0.5):
                             matrixs1[i][j] = 0.5
                             matrixs1[j][i] = 0.5
                         else:
-                            matrixs1[i][j] = round(discordances1(b, c, g), 3)
-                            matrixs1[j][i] = round(discordances1(f, e, h), 3)
+                            matrixs1[i][j] = round(d1_ab, 3)
+                            matrixs1[j][i] = round(d1_ba, 3)
                     elif (s1_ab == "dominates") and (s1_ba != "dominates"):
-                        if (discordances1(b, c, g) != 0.5):
-                            matrixs1[i][j] = round(ms1, 3)
+                        if (d1_ab != 0.5):
+                            matrixs1[i][j] = round(d1_ab, 3)
                             matrixs1[j][i] = 0
                         else:
                             matrixs1[i][j] = 0.5
                             matrixs1[j][i] = 0.5
                     elif (s1_ab != "dominates") and (s1_ba == "dominates"):
-                        if (discordances1(f, e, h) != 0.5):
+                        if (d1_ba != 0.5):
                             matrixs1[i][j] = 0
-                            matrixs1[j][i] = round(ms1, 3)
+                            matrixs1[j][i] = round(d1_ba, 3)
                         else:
                             matrixs1[i][j] = 0.5
                             matrixs1[j][i] = matrixs1[i][j]
@@ -1554,24 +1531,43 @@ if usetca != 1:
                         p,
                         q,
                     )
+                    d2_ab = discordance_s2(
+                        b,
+                        c,
+                        g,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
+
+                    d2_ba = discordance_s2(
+                        f,
+                        e,
+                        h,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
                     if (s2_ab == "dominates") and (s2_ba == "dominates"):
-                        if (discordances2(b, c, g) == 0.5) or (discordances2(f, e, h) == 0.5):
+                        if (d2_ab == 0.5) or (d2_ba == 0.5):
                             matrixs2[i][j] = 0.5
                             matrixs2[j][i] = 0.5
                         else:
-                            matrixs2[i][j] = round(discordances2(b, c, g), 3)
-                            matrixs2[j][i] = round(discordances2(f, e, h), 3)
+                            matrixs2[i][j] = round(d2_ab, 3)
+                            matrixs2[j][i] = round(d2_ba, 3)
                     elif (s2_ab == "dominates") and (s2_ba != "dominates"):
-                        if (discordances2(b, c, g) != 0.5):
-                            matrixs2[i][j] = round(ms2, 3)
+                        if (d2_ab != 0.5):
+                            matrixs2[i][j] = round(d2_ab, 3)
                             matrixs2[j][i] = 0
                         else:
                             matrixs2[i][j] = 0.5
                             matrixs2[j][i] = 0.5
                     elif (s2_ab != "dominates") and (s2_ba == "dominates"):
-                        if (discordances2(f, e, h) != 0.5):
+                        if (d2_ba != 0.5):
                             matrixs2[i][j] = 0
-                            matrixs2[j][i] = round(ms2, 3)
+                            matrixs2[j][i] = round(d2_ba, 3)
                         else:
                             matrixs2[i][j] = 0.5
                             matrixs2[j][i] = matrixs2[i][j]
@@ -1755,24 +1751,43 @@ if usetca != 1:
                         p,
                         q,
                     )
+                    d3_ab = discordance_s3(
+                        b,
+                        c,
+                        g,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
+
+                    d3_ba = discordance_s3(
+                        f,
+                        e,
+                        h,
+                        weight,
+                        p,
+                        q,
+                        d,
+                    )
                     if (s3_ab == "dominates") and (s3_ba == "dominates"):
-                        if (discordances3(b, c, g) == 0.5) or (discordances3(f, e, h) == 0.5):
+                        if (d3_ab == 0.5) or (d3_ba == 0.5):
                             matrixs3[i][j] = 0.5
                             matrixs3[j][i] = 0.5
                         else:
-                            matrixs3[i][j] = round(discordances3(b, c, g), 3)
-                            matrixs3[j][i] = round(discordances3(f, e, h), 3)
+                            matrixs3[i][j] = round(d3_ab, 3)
+                            matrixs3[j][i] = round(d3_ba, 3)
                     elif (s3_ab == "dominates") and (s3_ba != "dominates"):
-                        if (discordances3(b, c, g) != 0.5):
-                            matrixs3[i][j] = round(ms3, 3)
+                        if (d3_ab != 0.5):
+                            matrixs3[i][j] = round(d3_ab, 3)
                             matrixs3[j][i] = 0
                         else:
                             matrixs3[i][j] = 0.5
                             matrixs3[j][i] = 0.5
                     elif (s3_ab != "dominates") and (s3_ba == "dominates"):
-                        if (discordances3(f, e, h) != 0.5):
+                        if (d3_ba != 0.5):
                             matrixs3[i][j] = 0
-                            matrixs3[j][i] = round(ms3, 3)
+                            matrixs3[j][i] = round(d3_ba, 3)
                         else:
                             matrixs3[i][j] = 0.5
                             matrixs3[j][i] = matrixs3[i][j]

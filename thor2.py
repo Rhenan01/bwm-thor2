@@ -100,10 +100,7 @@ def scenario_s1(
                 )
             )
 
-        elif relation == "aIb":
-            opposition += weights[i] * 0.5 * pertinences[i]
-
-        elif relation == "bIa":
+        elif relation in ("aIb", "bIa"):
             opposition += weights[i] * 0.5 * pertinences[i]
 
         elif relation == "bQa":
@@ -170,10 +167,7 @@ def scenario_s2(
                 )
             )
 
-        elif relation == "aIb":
-            opposition += weights[i] * 0.5 * pertinences[i]
-
-        elif relation == "bIa":
+        elif relation in ("aIb", "bIa"):
             opposition += weights[i] * 0.5 * pertinences[i]
 
         elif relation == "bQa":
@@ -240,10 +234,7 @@ def scenario_s3(
                 )
             )
 
-        elif relation == "aIb":
-            support += weights[i] * 0.5 * pertinences[i]
-
-        elif relation == "bIa":
+        elif relation in ("aIb", "bIa"):
             support += weights[i] * 0.5 * pertinences[i]
 
         elif relation == "bQa":

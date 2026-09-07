@@ -1,14 +1,14 @@
+import pytest
+
 from thor2 import (
+    discordance_s1,
+    discordance_s2,
+    discordance_s3,
     preference_relation,
     scenario_s1,
     scenario_s2,
     scenario_s3,
-    discordance_s1,
-    discordance_s2,
-    discordance_s3,
 )
-
-import pytest
 
 
 def test_strict_preference_a_over_b():
