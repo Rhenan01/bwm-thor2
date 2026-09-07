@@ -4,6 +4,8 @@ from thor2 import (
     discordance_s1,
     discordance_s2,
     discordance_s3,
+    mean_pertinence,
+    performance_difference,
     preference_relation,
     scenario_s1,
     scenario_s2,
@@ -402,3 +404,24 @@ def test_discordance_s3_returns_half_when_threshold_is_reached():
     )
 
     assert result == pytest.approx(0.5, abs=1e-9)
+
+def test_mean_pertinence_reference_case():
+    result = mean_pertinence(
+        base_pertinence=1.0,
+        alternative_a=0.8,
+        alternative_b=0.6,
+    )
+
+    assert result == pytest.approx(0.8, abs=1e-9)
+
+
+def test_performance_difference_positive():
+    result = performance_difference(10.0, 6.0)
+
+    assert result == pytest.approx(4.0, abs=1e-9)
+
+
+def test_performance_difference_negative():
+    result = performance_difference(6.0, 10.0)
+
+    assert result == pytest.approx(-4.0, abs=1e-9)

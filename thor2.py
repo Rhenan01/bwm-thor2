@@ -530,3 +530,18 @@ def discordance_s3(
         return 0.5
 
     return support / (opposition + support)
+
+def mean_pertinence(base_pertinence, alternative_a, alternative_b):
+    """
+    Calculate the mean pertinence used in a pairwise comparison.
+    """
+    return float(
+        (base_pertinence + alternative_a + alternative_b) / 3
+    )
+
+
+def performance_difference(a, b):
+    """
+    Calculate the performance difference between two alternatives.
+    """
+    return a - b
