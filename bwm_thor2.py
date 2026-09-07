@@ -8,12 +8,10 @@ import numpy as np
 from aggregation import aggregate_weights
 from bwm import solve_bwm
 from thor2 import (
+    build_pairwise_vectors,
     discordance_s1,
     discordance_s2,
     discordance_s3,
-    mean_pertinence,
-    performance_difference,
-    preference_relation,
     scenario_s1,
     scenario_s2,
     scenario_s3,
@@ -711,12 +709,6 @@ while meter < 1:
     f = [];
     g = [];
     h = [];
-    x = 0;
-    y = 0;
-    w = 0;
-    z = 0;
-    v = 0;
-    t = 0;
     rs1 = [];
     rs1o = []
     if meter != 0:
@@ -730,29 +722,22 @@ while meter < 1:
     for i in range(alt):
         for j in range(alt):
             if (i < j):
-                for k in range(cri):
-                    x = preference_relation(
-                        matrix[i][k],
-                        matrix[j][k],
-                        p[k],
-                        q[k],
-                    )
-                    y = performance_difference(matrix[i][k], matrix[j][k])
-                    w = preference_relation(
-                        matrix[j][k],
-                        matrix[i][k],
-                        p[k],
-                        q[k],
-                    )
-                    z = performance_difference(matrix[j][k], matrix[i][k])
-                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                    b.append(y)
-                    c.append(x)
-                    e.append(w)
-                    f.append(z)
-                    g.append(v)
-                    h.append(t)
+                (
+                    c,
+                    b,
+                    g,
+                    e,
+                    f,
+                    h,
+                ) = build_pairwise_vectors(
+                    matrix[i],
+                    matrix[j],
+                    pertinence,
+                    pertinence2[i],
+                    pertinence2[j],
+                    p,
+                    q,
+                )
                 s1_ab = scenario_s1(
                     c,
                     b,
@@ -884,12 +869,6 @@ while meter < 1:
     f = [];
     g = [];
     h = [];
-    x = 0;
-    y = 0;
-    w = 0;
-    z = 0;
-    v = 0;
-    t = 0;
     rs2 = [];
     rs2o = []
     if meter != 0:
@@ -903,29 +882,22 @@ while meter < 1:
     for i in range(alt):
         for j in range(alt):
             if (i < j):
-                for k in range(cri):
-                    x = preference_relation(
-                        matrix[i][k],
-                        matrix[j][k],
-                        p[k],
-                        q[k],
-                    )
-                    y = performance_difference(matrix[i][k], matrix[j][k])
-                    w = preference_relation(
-                        matrix[j][k],
-                        matrix[i][k],
-                        p[k],
-                        q[k],
-                    )
-                    z = performance_difference(matrix[j][k], matrix[i][k])
-                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                    b.append(y)
-                    c.append(x)
-                    e.append(w)
-                    f.append(z)
-                    g.append(v)
-                    h.append(t)
+                (
+                    c,
+                    b,
+                    g,
+                    e,
+                    f,
+                    h,
+                ) = build_pairwise_vectors(
+                    matrix[i],
+                    matrix[j],
+                    pertinence,
+                    pertinence2[i],
+                    pertinence2[j],
+                    p,
+                    q,
+                )
                 s2_ab = scenario_s2(
                     c,
                     b,
@@ -1057,12 +1029,6 @@ while meter < 1:
     f = [];
     g = [];
     h = [];
-    x = 0;
-    y = 0;
-    w = 0;
-    z = 0;
-    v = 0;
-    t = 0;
     rs3 = [];
     rs3o = []
     if meter != 0:
@@ -1076,29 +1042,22 @@ while meter < 1:
     for i in range(alt):
         for j in range(alt):
             if (i < j):
-                for k in range(cri):
-                    x = preference_relation(
-                        matrix[i][k],
-                        matrix[j][k],
-                        p[k],
-                        q[k],
-                    )
-                    y = performance_difference(matrix[i][k], matrix[j][k])
-                    w = preference_relation(
-                        matrix[j][k],
-                        matrix[i][k],
-                        p[k],
-                        q[k],
-                    )
-                    z = performance_difference(matrix[j][k], matrix[i][k])
-                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                    b.append(y)
-                    c.append(x)
-                    e.append(w)
-                    f.append(z)
-                    g.append(v)
-                    h.append(t)
+                (
+                    c,
+                    b,
+                    g,
+                    e,
+                    f,
+                    h,
+                ) = build_pairwise_vectors(
+                    matrix[i],
+                    matrix[j],
+                    pertinence,
+                    pertinence2[i],
+                    pertinence2[j],
+                    p,
+                    q,
+                )
                 s3_ab = scenario_s3(
                     c,
                     b,
@@ -1251,12 +1210,6 @@ if usetca != 1:
         f = [];
         g = [];
         h = [];
-        x = 0;
-        y = 0;
-        w = 0;
-        z = 0;
-        v = 0;
-        t = 0;
         rs1 = [];
         rs1o = [];
         if meter != 0 and usetca != 1:
@@ -1270,29 +1223,22 @@ if usetca != 1:
         for i in range(alt):
             for j in range(alt):
                 if (i < j):
-                    for k in range(cri):
-                        x = preference_relation(
-                            matrix[i][k],
-                            matrix[j][k],
-                            p[k],
-                            q[k],
-                        )
-                        y = performance_difference(matrix[i][k], matrix[j][k])
-                        w = preference_relation(
-                            matrix[j][k],
-                            matrix[i][k],
-                            p[k],
-                            q[k],
-                        )
-                        z = performance_difference(matrix[j][k], matrix[i][k])
-                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                        b.append(y)
-                        c.append(x)
-                        e.append(w)
-                        f.append(z)
-                        g.append(v)
-                        h.append(t)
+                    (
+                        c,
+                        b,
+                        g,
+                        e,
+                        f,
+                        h,
+                    ) = build_pairwise_vectors(
+                        matrix[i],
+                        matrix[j],
+                        pertinence,
+                        pertinence2[i],
+                        pertinence2[j],
+                        p,
+                        q,
+                    )
                     s1_ab = scenario_s1(
                         c,
                         b,
@@ -1470,12 +1416,6 @@ if usetca != 1:
         f = [];
         g = [];
         h = [];
-        x = 0;
-        y = 0;
-        w = 0;
-        z = 0;
-        v = 0;
-        t = 0;
         rs2 = [];
         rs2o = []
         if meter != 0 and usetca != 1:
@@ -1489,29 +1429,22 @@ if usetca != 1:
         for i in range(alt):
             for j in range(alt):
                 if (i < j):
-                    for k in range(cri):
-                        x = preference_relation(
-                            matrix[i][k],
-                            matrix[j][k],
-                            p[k],
-                            q[k],
-                        )
-                        y = performance_difference(matrix[i][k], matrix[j][k])
-                        w = preference_relation(
-                            matrix[j][k],
-                            matrix[i][k],
-                            p[k],
-                            q[k],
-                        )
-                        z = performance_difference(matrix[j][k], matrix[i][k])
-                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                        b.append(y)
-                        c.append(x)
-                        e.append(w)
-                        f.append(z)
-                        g.append(v)
-                        h.append(t)
+                    (
+                        c,
+                        b,
+                        g,
+                        e,
+                        f,
+                        h,
+                    ) = build_pairwise_vectors(
+                        matrix[i],
+                        matrix[j],
+                        pertinence,
+                        pertinence2[i],
+                        pertinence2[j],
+                        p,
+                        q,
+                    )
                     s2_ab = scenario_s2(
                         c,
                         b,
@@ -1689,12 +1622,6 @@ if usetca != 1:
         f = [];
         g = [];
         h = [];
-        x = 0;
-        y = 0;
-        w = 0;
-        z = 0;
-        v = 0;
-        t = 0;
         rs3 = [];
         rs3o = []
         if meter != 0 and usetca != 1:
@@ -1708,29 +1635,22 @@ if usetca != 1:
         for i in range(alt):
             for j in range(alt):
                 if (i < j):
-                    for k in range(cri):
-                        x = preference_relation(
-                            matrix[i][k],
-                            matrix[j][k],
-                            p[k],
-                            q[k],
-                        )
-                        y = performance_difference(matrix[i][k], matrix[j][k])
-                        w = preference_relation(
-                            matrix[j][k],
-                            matrix[i][k],
-                            p[k],
-                            q[k],
-                        )
-                        z = performance_difference(matrix[j][k], matrix[i][k])
-                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
-                        b.append(y)
-                        c.append(x)
-                        e.append(w)
-                        f.append(z)
-                        g.append(v)
-                        h.append(t)
+                    (
+                        c,
+                        b,
+                        g,
+                        e,
+                        f,
+                        h,
+                    ) = build_pairwise_vectors(
+                        matrix[i],
+                        matrix[j],
+                        pertinence,
+                        pertinence2[i],
+                        pertinence2[j],
+                        p,
+                        q,
+                    )
                     s3_ab = scenario_s3(
                         c,
                         b,
