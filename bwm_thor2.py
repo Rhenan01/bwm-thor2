@@ -10,6 +10,7 @@ import textwrap
 
 from bwm import solve_bwm
 from aggregation import aggregate_weights
+from thor2 import preference_relation
 
 sg.theme("PythonPlus")
 sg.set_options(input_text_color='white', button_color=("white", "#0078D4"))
@@ -552,7 +553,7 @@ for decisor in range(1, d + 1):
     except Exception as e:
         sg.popup_error(f"❌ Error solving BWM for DM#{decisor}:\n{e}")
         sys.exit()
-        
+
 geom_means = aggregate_weights(all_weights)
 
 weight_str = "\n".join(
@@ -847,21 +848,6 @@ dic = 0
 for i in range(cri):
     weight2[i] = weight[i]
     weight4[i] = weight[i]
-def compare(a, b):
-    if (a - b) > p[k]:
-        x = "aPb"
-    elif (a - b) > q[k]:
-        x = "aQb"
-    elif (a - b) >= 0:
-        x = "aIb"
-    elif (a - b) >= (-q[k]):
-        x = "bIa"
-    elif (a - b) >= (-p[k]):
-        x = "bQa"
-    elif (a - b) < (-p[k]):
-        x = "bPa"
-    return x
-
 
 average1 = round(average(pertinence), 4)
 medtcan.append(average1)
@@ -907,9 +893,19 @@ while meter < 1:
         for j in range(alt):
             if (i < j):
                 for k in range(cri):
-                    x = compare(matrix[i][k], matrix[j][k])
+                    x = preference_relation(
+                        matrix[i][k],
+                        matrix[j][k],
+                        p[k],
+                        q[k],
+                    )
                     y = dif(matrix[i][k], matrix[j][k])
-                    w = compare(matrix[j][k], matrix[i][k])
+                    w = preference_relation(
+                        matrix[j][k],
+                        matrix[i][k],
+                        p[k],
+                        q[k],
+                    )
                     z = dif(matrix[j][k], matrix[i][k])
                     v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                     t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
@@ -1034,9 +1030,19 @@ while meter < 1:
         for j in range(alt):
             if (i < j):
                 for k in range(cri):
-                    x = compare(matrix[i][k], matrix[j][k])
+                    x = preference_relation(
+                        matrix[i][k],
+                        matrix[j][k],
+                        p[k],
+                        q[k],
+                    )
                     y = dif(matrix[i][k], matrix[j][k])
-                    w = compare(matrix[j][k], matrix[i][k])
+                    w = preference_relation(
+                        matrix[j][k],
+                        matrix[i][k],
+                        p[k],
+                        q[k],
+                    )
                     z = dif(matrix[j][k], matrix[i][k])
                     v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                     t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
@@ -1161,9 +1167,19 @@ while meter < 1:
         for j in range(alt):
             if (i < j):
                 for k in range(cri):
-                    x = compare(matrix[i][k], matrix[j][k])
+                    x = preference_relation(
+                        matrix[i][k],
+                        matrix[j][k],
+                        p[k],
+                        q[k],
+                    )
                     y = dif(matrix[i][k], matrix[j][k])
-                    w = compare(matrix[j][k], matrix[i][k])
+                    w = preference_relation(
+                        matrix[j][k],
+                        matrix[i][k],
+                        p[k],
+                        q[k],
+                    )
                     z = dif(matrix[j][k], matrix[i][k])
                     v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                     t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
@@ -1309,9 +1325,19 @@ if usetca != 1:
             for j in range(alt):
                 if (i < j):
                     for k in range(cri):
-                        x = compare(matrix[i][k], matrix[j][k])
+                        x = preference_relation(
+                            matrix[i][k],
+                            matrix[j][k],
+                            p[k],
+                            q[k],
+                        )
                         y = dif(matrix[i][k], matrix[j][k])
-                        w = compare(matrix[j][k], matrix[i][k])
+                        w = preference_relation(
+                            matrix[j][k],
+                            matrix[i][k],
+                            p[k],
+                            q[k],
+                        )
                         z = dif(matrix[j][k], matrix[i][k])
                         v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                         t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
@@ -1483,9 +1509,19 @@ if usetca != 1:
             for j in range(alt):
                 if (i < j):
                     for k in range(cri):
-                        x = compare(matrix[i][k], matrix[j][k])
+                        x = preference_relation(
+                            matrix[i][k],
+                            matrix[j][k],
+                            p[k],
+                            q[k],
+                        )
                         y = dif(matrix[i][k], matrix[j][k])
-                        w = compare(matrix[j][k], matrix[i][k])
+                        w = preference_relation(
+                            matrix[j][k],
+                            matrix[i][k],
+                            p[k],
+                            q[k],
+                        )
                         z = dif(matrix[j][k], matrix[i][k])
                         v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                         t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
@@ -1657,9 +1693,19 @@ if usetca != 1:
             for j in range(alt):
                 if (i < j):
                     for k in range(cri):
-                        x = compare(matrix[i][k], matrix[j][k])
+                        x = preference_relation(
+                            matrix[i][k],
+                            matrix[j][k],
+                            p[k],
+                            q[k],
+                        )
                         y = dif(matrix[i][k], matrix[j][k])
-                        w = compare(matrix[j][k], matrix[i][k])
+                        w = preference_relation(
+                            matrix[j][k],
+                            matrix[i][k],
+                            p[k],
+                            q[k],
+                        )
                         z = dif(matrix[j][k], matrix[i][k])
                         v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
                         t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
