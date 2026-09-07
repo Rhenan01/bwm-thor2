@@ -2,12 +2,13 @@ import gc
 import FreeSimpleGUI as sg
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sys
 import textwrap
-from scipy.optimize import linprog
+
+from bwm import solve_bwm
 
 sg.theme("PythonPlus")
 sg.set_options(input_text_color='white', button_color=("white", "#0078D4"))
@@ -538,73 +539,6 @@ for decisor in range(1, d + 1):
 
             except:
                 sg.popup('❌ Please select a value from 1 to 9 for each comparison.')
-
-    def solve_bwm(best_index, worst_index, a_bj, a_jw):
-        n = len(a_bj)
-        c = [0] * n + [1]
-
-        A_ub = []
-        b_ub = []
-
-
-        for j in range(n):
-            if j == best_index:
-                continue
-
-            row_pos = [0] * (n + 1)
-            row_neg = [0] * (n + 1)
-
-            row_pos[best_index] = 1
-            row_pos[j] = -a_bj[j]
-            row_pos[-1] = -1
-            A_ub.append(row_pos)
-            b_ub.append(0)
-
-            row_neg[best_index] = -1
-            row_neg[j] = a_bj[j]
-            row_neg[-1] = -1
-            A_ub.append(row_neg)
-            b_ub.append(0)
-
-
-        for j in range(n):
-            if j == worst_index:
-                continue
-
-            row_pos = [0] * (n + 1)
-            row_neg = [0] * (n + 1)
-
-            row_pos[j] = 1
-            row_pos[worst_index] = -a_jw[j]
-            row_pos[-1] = -1
-            A_ub.append(row_pos)
-            b_ub.append(0)
-
-            row_neg[j] = -1
-            row_neg[worst_index] = a_jw[j]
-            row_neg[-1] = -1
-            A_ub.append(row_neg)
-            b_ub.append(0)
-
-
-        A_eq = [[1] * n + [0]]
-        b_eq = [1]
-
-
-        bounds = [(0, None)] * (n + 1)
-
-
-        result = linprog(c=c, A_ub=A_ub, b_ub=b_ub,
-                         A_eq=A_eq, b_eq=b_eq,
-                         bounds=bounds, method='highs')
-
-        if result.success:
-            weights = result.x[:-1]
-            xi = result.x[-1]
-            return weights, xi
-        else:
-            raise ValueError("Optimization failed.")
-
 
     try:
         weights, xi = solve_bwm(best_index, worst_index, final_bo, final_ow)
