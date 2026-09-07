@@ -634,3 +634,137 @@ def build_pairwise_vectors(
         differences_ba,
         pertinences_ba,
     )
+
+def evaluate_pair(
+    relations_ab,
+    differences_ab,
+    pertinences_ab,
+    relations_ba,
+    differences_ba,
+    pertinences_ba,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+    discordance_thresholds,
+    scenario,
+):
+    """
+    Avalia um par de alternativas segundo um dos cenários THOR2.
+
+    Retorna os valores de dominância de A sobre B e de B sobre A,
+    preservando a lógica da implementação original.
+    """
+
+    scenario_functions = {
+        "s1": scenario_s1,
+        "s2": scenario_s2,
+        "s3": scenario_s3,
+    }
+
+    discordance_functions = {
+        "s1": discordance_s1,
+        "s2": discordance_s2,
+        "s3": discordance_s3,
+    }
+
+    if scenario not in scenario_functions:
+        raise ValueError(
+            "Scenario must be 's1', 's2' or 's3'."
+        )
+
+    scenario_function = scenario_functions[scenario]
+    discordance_function = discordance_functions[scenario]
+
+    dominates_ab = scenario_function(
+        relations_ab,
+        differences_ab,
+        pertinences_ab,
+        weights,
+        preference_thresholds,
+        indifference_thresholds,
+    )
+
+    dominates_ba = scenario_function(
+        relations_ba,
+        differences_ba,
+        pertinences_ba,
+        weights,
+        preference_thresholds,
+        indifference_thresholds,
+    )
+
+    if (
+        dominates_ab == "dominates"
+        and dominates_ba == "dominates"
+    ):
+        discordance_ab = discordance_function(
+            differences_ab,
+            relations_ab,
+            pertinences_ab,
+            weights,
+            preference_thresholds,
+            indifference_thresholds,
+            discordance_thresholds,
+        )
+
+        # Mantém o curto-circuito da implementação original.
+        if discordance_ab == 0.5:
+            return 0.5, 0.5
+
+        discordance_ba = discordance_function(
+            differences_ba,
+            relations_ba,
+            pertinences_ba,
+            weights,
+            preference_thresholds,
+            indifference_thresholds,
+            discordance_thresholds,
+        )
+
+        if discordance_ba == 0.5:
+            return 0.5, 0.5
+
+        return (
+            round(discordance_ab, 3),
+            round(discordance_ba, 3),
+        )
+
+    if (
+        dominates_ab == "dominates"
+        and dominates_ba != "dominates"
+    ):
+        discordance_ab = discordance_function(
+            differences_ab,
+            relations_ab,
+            pertinences_ab,
+            weights,
+            preference_thresholds,
+            indifference_thresholds,
+            discordance_thresholds,
+        )
+
+        if discordance_ab != 0.5:
+            return round(discordance_ab, 3), 0
+
+        return 0.5, 0.5
+
+    if (
+        dominates_ab != "dominates"
+        and dominates_ba == "dominates"
+    ):
+        discordance_ba = discordance_function(
+            differences_ba,
+            relations_ba,
+            pertinences_ba,
+            weights,
+            preference_thresholds,
+            indifference_thresholds,
+            discordance_thresholds,
+        )
+
+        if discordance_ba != 0.5:
+            return 0, round(discordance_ba, 3)
+
+        return 0.5, 0.5
+
+    return 0.5, 0.5

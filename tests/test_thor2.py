@@ -5,6 +5,7 @@ from thor2 import (
     discordance_s1,
     discordance_s2,
     discordance_s3,
+    evaluate_pair,
     mean_pertinence,
     performance_difference,
     preference_relation,
@@ -12,7 +13,6 @@ from thor2 import (
     scenario_s2,
     scenario_s3,
 )
-
 
 def test_strict_preference_a_over_b():
     assert preference_relation(
@@ -484,3 +484,91 @@ def test_pairwise_differences_are_opposites():
 
     for ab, ba in zip(differences_ab, differences_ba):
         assert ab == pytest.approx(-ba, abs=1e-9)
+
+def test_evaluate_pair_s1_strict_preference():
+    result = evaluate_pair(
+        relations_ab=["aPb"],
+        differences_ab=[5.0],
+        pertinences_ab=[1.0],
+        relations_ba=["bPa"],
+        differences_ba=[-5.0],
+        pertinences_ba=[1.0],
+        weights=[1.0],
+        preference_thresholds=[3.0],
+        indifference_thresholds=[1.0],
+        discordance_thresholds=[10.0],
+        scenario="s1",
+    )
+
+    assert result == (1.0, 0)
+
+
+def test_evaluate_pair_s2_strict_preference():
+    result = evaluate_pair(
+        relations_ab=["aPb"],
+        differences_ab=[5.0],
+        pertinences_ab=[1.0],
+        relations_ba=["bPa"],
+        differences_ba=[-5.0],
+        pertinences_ba=[1.0],
+        weights=[1.0],
+        preference_thresholds=[3.0],
+        indifference_thresholds=[1.0],
+        discordance_thresholds=[10.0],
+        scenario="s2",
+    )
+
+    assert result == (1.0, 0)
+
+
+def test_evaluate_pair_s3_strict_preference():
+    result = evaluate_pair(
+        relations_ab=["aPb"],
+        differences_ab=[5.0],
+        pertinences_ab=[1.0],
+        relations_ba=["bPa"],
+        differences_ba=[-5.0],
+        pertinences_ba=[1.0],
+        weights=[1.0],
+        preference_thresholds=[3.0],
+        indifference_thresholds=[1.0],
+        discordance_thresholds=[10.0],
+        scenario="s3",
+    )
+
+    assert result == (1.0, 0)
+
+
+def test_evaluate_pair_does_not_calculate_unnecessary_discordance():
+    result = evaluate_pair(
+        relations_ab=["aPb"],
+        differences_ab=[5.0],
+        pertinences_ab=[1.0],
+        relations_ba=["bPa"],
+        differences_ba=[-5.0],
+        pertinences_ba=[1.0],
+        weights=[0.0],
+        preference_thresholds=[3.0],
+        indifference_thresholds=[1.0],
+        discordance_thresholds=[10.0],
+        scenario="s1",
+    )
+
+    assert result == (0.5, 0.5)
+
+
+def test_evaluate_pair_invalid_scenario():
+    with pytest.raises(ValueError):
+        evaluate_pair(
+            relations_ab=["aPb"],
+            differences_ab=[5.0],
+            pertinences_ab=[1.0],
+            relations_ba=["bPa"],
+            differences_ba=[-5.0],
+            pertinences_ba=[1.0],
+            weights=[1.0],
+            preference_thresholds=[3.0],
+            indifference_thresholds=[1.0],
+            discordance_thresholds=[10.0],
+            scenario="invalid",
+        )
