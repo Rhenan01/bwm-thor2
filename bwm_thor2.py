@@ -10,7 +10,12 @@ import textwrap
 
 from bwm import solve_bwm
 from aggregation import aggregate_weights
-from thor2 import preference_relation
+from thor2 import (
+    preference_relation,
+    scenario_s1,
+    scenario_s2,
+    scenario_s3,
+)
 
 sg.theme("PythonPlus")
 sg.set_options(input_text_color='white', button_color=("white", "#0078D4"))
@@ -342,73 +347,6 @@ def discordances3(a, b, c):
     else:
         ms3 = (sum1 / (Sumt + sum1))
         return ms3
-
-
-def s1(a, b, c):
-    sum11 = 0
-    sum21 = 0
-    for i in range(cri):
-        if a[i] == "aPb":
-            sum11 += weight[i] * c[i]
-        elif a[i] == "aQb":
-            sum21 += abs((weight[i]) * (c[i]) * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "aIb":
-            sum21 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bIa":
-            sum21 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bQa":
-            sum21 += abs((weight[i]) * (c[i]) * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "bPa":
-            sum21 += weight[i] * c[i]
-    if (sum11 > sum21):
-        return "dominates"
-    else:
-        return "does not dominate"
-
-
-def s2(a, b, c):
-    sum12 = 0
-    sum22 = 0
-    for i in range(cri):
-        if a[i] == "aPb":
-            sum12 += weight[i] * c[i]
-        elif a[i] == "aQb":
-            sum12 += abs(weight[i] * c[i] * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "aIb":
-            sum22 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bIa":
-            sum22 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bQa":
-            sum22 += abs(weight[i] * c[i] * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "bPa":
-            sum22 += weight[i] * c[i]
-    if (sum12 > sum22):
-        return "dominates"
-    else:
-        return "does not dominate"
-
-
-def s3(a, b, c):
-    sum13 = 0
-    sum23 = 0
-    for i in range(cri):
-        if a[i] == "aPb":
-            sum13 += weight[i] * c[i]
-        elif a[i] == "aQb":
-            sum13 += abs(weight[i] * c[i] * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "aIb":
-            sum13 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bIa":
-            sum13 += weight[i] * 0.5 * c[i]
-        elif a[i] == "bQa":
-            sum23 += abs(weight[i] * c[i] * (((((abs(b[i])) - q[i]) / (p[i] - q[i])) * (0.5) + 0.5)))
-        elif a[i] == "bPa":
-            sum23 += weight[i] * c[i]
-    if (sum13 > sum23):
-        return "dominates"
-    else:
-        return "does not dominate"
-
 
 def ind(a, b, c):
     x = float((a + b + c) / 3)
@@ -915,21 +853,38 @@ while meter < 1:
                     f.append(z)
                     g.append(v)
                     h.append(t)
-                if (s1(c, b, g) == "dominates") and (s1(e, f, h) == "dominates"):
+                s1_ab = scenario_s1(
+                    c,
+                    b,
+                    g,
+                    weight,
+                    p,
+                    q,
+                )
+
+                s1_ba = scenario_s1(
+                    e,
+                    f,
+                    h,
+                    weight,
+                    p,
+                    q,
+                )
+                if (s1_ab == "dominates") and (s1_ba == "dominates"):
                     if (discordances1(b, c, g) == 0.5) or (discordances1(f, e, h) == 0.5):
                         matrixs1[i][j] = 0.5
                         matrixs1[j][i] = 0.5
                     else:
                         matrixs1[i][j] = round(discordances1(b, c, g), 3)
                         matrixs1[j][i] = round(discordances1(f, e, h), 3)
-                elif (s1(c, b, g) == "dominates") and (s1(e, f, h) != "dominates"):
+                elif (s1_ab == "dominates") and (s1_ba != "dominates"):
                     if (discordances1(b, c, g) != 0.5):
                         matrixs1[i][j] = round(ms1, 3)
                         matrixs1[j][i] = 0
                     else:
                         matrixs1[i][j] = 0.5
                         matrixs1[j][i] = 0.5
-                elif (s1(c, b, g) != "dominates") and (s1(e, f, h) == "dominates"):
+                elif (s1_ab != "dominates") and (s1_ba == "dominates"):
                     if (discordances1(f, e, h) != 0.5):
                         matrixs1[i][j] = 0
                         matrixs1[j][i] = round(ms1, 3)
@@ -1052,21 +1007,38 @@ while meter < 1:
                     f.append(z)
                     g.append(v)
                     h.append(t)
-                if (s2(c, b, g) == "dominates") and (s2(e, f, h) == "dominates"):
+                s2_ab = scenario_s2(
+                    c,
+                    b,
+                    g,
+                    weight,
+                    p,
+                    q,
+                )
+
+                s2_ba = scenario_s2(
+                    e,
+                    f,
+                    h,
+                    weight,
+                    p,
+                    q,
+                )
+                if (s2_ab == "dominates") and (s2_ba == "dominates"):
                     if (discordances2(b, c, g) == 0.5) or (discordances2(f, e, h) == 0.5):
                         matrixs2[i][j] = 0.5
                         matrixs2[j][i] = 0.5
                     else:
                         matrixs2[i][j] = round(discordances2(b, c, g), 3)
                         matrixs2[j][i] = round(discordances2(f, e, h), 3)
-                elif (s2(c, b, g) == "dominates") and (s2(e, f, h) != "dominates"):
+                elif (s2_ab == "dominates") and (s2_ba != "dominates"):
                     if (discordances2(b, c, g) != 0.5):
                         matrixs2[i][j] = round(ms2, 3)
                         matrixs2[j][i] = 0
                     else:
                         matrixs2[i][j] = 0.5
                         matrixs2[j][i] = 0.5
-                elif (s2(c, b, g) != "dominates") and (s2(e, f, h) == "dominates"):
+                elif (s2_ab != "dominates") and (s2_ba == "dominates"):
                     if (discordances2(f, e, h) != 0.5):
                         matrixs2[i][j] = 0
                         matrixs2[j][i] = round(ms2, 3)
@@ -1189,21 +1161,38 @@ while meter < 1:
                     f.append(z)
                     g.append(v)
                     h.append(t)
-                if (s3(c, b, g) == "dominates") and (s3(e, f, h) == "dominates"):
+                s3_ab = scenario_s3(
+                    c,
+                    b,
+                    g,
+                    weight,
+                    p,
+                    q,
+                )
+
+                s3_ba = scenario_s3(
+                    e,
+                    f,
+                    h,
+                    weight,
+                    p,
+                    q,
+                )
+                if (s3_ab == "dominates") and (s3_ba == "dominates"):
                     if (discordances3(b, c, g) == 0.5) or (discordances3(f, e, h) == 0.5):
                         matrixs3[i][j] = 0.5
                         matrixs3[j][i] = 0.5
                     else:
                         matrixs3[i][j] = round(discordances3(b, c, g), 3)
                         matrixs3[j][i] = round(discordances3(f, e, h), 3)
-                elif (s3(c, b, g) == "dominates") and (s3(e, f, h) != "dominates"):
+                elif (s3_ab == "dominates") and (s3_ba != "dominates"):
                     if (discordances3(b, c, g) != 0.5):
                         matrixs3[i][j] = round(ms3, 3)
                         matrixs3[j][i] = 0
                     else:
                         matrixs3[i][j] = 0.5
                         matrixs3[j][i] = 0.5
-                elif (s3(c, b, g) != "dominates") and (s3(e, f, h) == "dominates"):
+                elif (s3_ab != "dominates") and (s3_ba == "dominates"):
                     if (discordances3(f, e, h) != 0.5):
                         matrixs3[i][j] = 0
                         matrixs3[j][i] = round(ms3, 3)
@@ -1347,21 +1336,38 @@ if usetca != 1:
                         f.append(z)
                         g.append(v)
                         h.append(t)
-                    if (s1(c, b, g) == "dominates") and (s1(e, f, h) == "dominates"):
+                    s1_ab = scenario_s1(
+                        c,
+                        b,
+                        g,
+                        weight,
+                        p,
+                        q,
+                    )
+
+                    s1_ba = scenario_s1(
+                        e,
+                        f,
+                        h,
+                        weight,
+                        p,
+                        q,
+                    )
+                    if (s1_ab == "dominates") and (s1_ba == "dominates"):
                         if (discordances1(b, c, g) == 0.5) or (discordances1(f, e, h) == 0.5):
                             matrixs1[i][j] = 0.5
                             matrixs1[j][i] = 0.5
                         else:
                             matrixs1[i][j] = round(discordances1(b, c, g), 3)
                             matrixs1[j][i] = round(discordances1(f, e, h), 3)
-                    elif (s1(c, b, g) == "dominates") and (s1(e, f, h) != "dominates"):
+                    elif (s1_ab == "dominates") and (s1_ba != "dominates"):
                         if (discordances1(b, c, g) != 0.5):
                             matrixs1[i][j] = round(ms1, 3)
                             matrixs1[j][i] = 0
                         else:
                             matrixs1[i][j] = 0.5
                             matrixs1[j][i] = 0.5
-                    elif (s1(c, b, g) != "dominates") and (s1(e, f, h) == "dominates"):
+                    elif (s1_ab != "dominates") and (s1_ba == "dominates"):
                         if (discordances1(f, e, h) != 0.5):
                             matrixs1[i][j] = 0
                             matrixs1[j][i] = round(ms1, 3)
@@ -1531,21 +1537,38 @@ if usetca != 1:
                         f.append(z)
                         g.append(v)
                         h.append(t)
-                    if (s2(c, b, g) == "dominates") and (s2(e, f, h) == "dominates"):
+                    s2_ab = scenario_s2(
+                        c,
+                        b,
+                        g,
+                        weight,
+                        p,
+                        q,
+                    )
+
+                    s2_ba = scenario_s2(
+                        e,
+                        f,
+                        h,
+                        weight,
+                        p,
+                        q,
+                    )
+                    if (s2_ab == "dominates") and (s2_ba == "dominates"):
                         if (discordances2(b, c, g) == 0.5) or (discordances2(f, e, h) == 0.5):
                             matrixs2[i][j] = 0.5
                             matrixs2[j][i] = 0.5
                         else:
                             matrixs2[i][j] = round(discordances2(b, c, g), 3)
                             matrixs2[j][i] = round(discordances2(f, e, h), 3)
-                    elif (s2(c, b, g) == "dominates") and (s2(e, f, h) != "dominates"):
+                    elif (s2_ab == "dominates") and (s2_ba != "dominates"):
                         if (discordances2(b, c, g) != 0.5):
                             matrixs2[i][j] = round(ms2, 3)
                             matrixs2[j][i] = 0
                         else:
                             matrixs2[i][j] = 0.5
                             matrixs2[j][i] = 0.5
-                    elif (s2(c, b, g) != "dominates") and (s2(e, f, h) == "dominates"):
+                    elif (s2_ab != "dominates") and (s2_ba == "dominates"):
                         if (discordances2(f, e, h) != 0.5):
                             matrixs2[i][j] = 0
                             matrixs2[j][i] = round(ms2, 3)
@@ -1715,21 +1738,38 @@ if usetca != 1:
                         f.append(z)
                         g.append(v)
                         h.append(t)
-                    if (s3(c, b, g) == "dominates") and (s3(e, f, h) == "dominates"):
+                    s3_ab = scenario_s3(
+                        c,
+                        b,
+                        g,
+                        weight,
+                        p,
+                        q,
+                    )
+
+                    s3_ba = scenario_s3(
+                        e,
+                        f,
+                        h,
+                        weight,
+                        p,
+                        q,
+                    )
+                    if (s3_ab == "dominates") and (s3_ba == "dominates"):
                         if (discordances3(b, c, g) == 0.5) or (discordances3(f, e, h) == 0.5):
                             matrixs3[i][j] = 0.5
                             matrixs3[j][i] = 0.5
                         else:
                             matrixs3[i][j] = round(discordances3(b, c, g), 3)
                             matrixs3[j][i] = round(discordances3(f, e, h), 3)
-                    elif (s3(c, b, g) == "dominates") and (s3(e, f, h) != "dominates"):
+                    elif (s3_ab == "dominates") and (s3_ba != "dominates"):
                         if (discordances3(b, c, g) != 0.5):
                             matrixs3[i][j] = round(ms3, 3)
                             matrixs3[j][i] = 0
                         else:
                             matrixs3[i][j] = 0.5
                             matrixs3[j][i] = 0.5
-                    elif (s3(c, b, g) != "dominates") and (s3(e, f, h) == "dominates"):
+                    elif (s3_ab != "dominates") and (s3_ba == "dominates"):
                         if (discordances3(f, e, h) != 0.5):
                             matrixs3[i][j] = 0
                             matrixs3[j][i] = round(ms3, 3)
