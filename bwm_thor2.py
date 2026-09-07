@@ -11,6 +11,8 @@ from thor2 import (
     discordance_s1,
     discordance_s2,
     discordance_s3,
+    mean_pertinence,
+    performance_difference,
     preference_relation,
     scenario_s1,
     scenario_s2,
@@ -245,15 +247,6 @@ def negative_test(a):
 def dotcomma(a):
     d = a.strip().replace(",", ".")
     return d
-
-def ind(a, b, c):
-    x = float((a + b + c) / 3)
-    return x
-
-
-def dif(a, b):
-    x = a - b
-    return x
 
 # Data coming from the beginning of the code
 n = cri
@@ -744,16 +737,16 @@ while meter < 1:
                         p[k],
                         q[k],
                     )
-                    y = dif(matrix[i][k], matrix[j][k])
+                    y = performance_difference(matrix[i][k], matrix[j][k])
                     w = preference_relation(
                         matrix[j][k],
                         matrix[i][k],
                         p[k],
                         q[k],
                     )
-                    z = dif(matrix[j][k], matrix[i][k])
-                    v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                    z = performance_difference(matrix[j][k], matrix[i][k])
+                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                     b.append(y)
                     c.append(x)
                     e.append(w)
@@ -917,16 +910,16 @@ while meter < 1:
                         p[k],
                         q[k],
                     )
-                    y = dif(matrix[i][k], matrix[j][k])
+                    y = performance_difference(matrix[i][k], matrix[j][k])
                     w = preference_relation(
                         matrix[j][k],
                         matrix[i][k],
                         p[k],
                         q[k],
                     )
-                    z = dif(matrix[j][k], matrix[i][k])
-                    v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                    z = performance_difference(matrix[j][k], matrix[i][k])
+                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                     b.append(y)
                     c.append(x)
                     e.append(w)
@@ -1090,16 +1083,16 @@ while meter < 1:
                         p[k],
                         q[k],
                     )
-                    y = dif(matrix[i][k], matrix[j][k])
+                    y = performance_difference(matrix[i][k], matrix[j][k])
                     w = preference_relation(
                         matrix[j][k],
                         matrix[i][k],
                         p[k],
                         q[k],
                     )
-                    z = dif(matrix[j][k], matrix[i][k])
-                    v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                    t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                    z = performance_difference(matrix[j][k], matrix[i][k])
+                    v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                    t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                     b.append(y)
                     c.append(x)
                     e.append(w)
@@ -1284,16 +1277,16 @@ if usetca != 1:
                             p[k],
                             q[k],
                         )
-                        y = dif(matrix[i][k], matrix[j][k])
+                        y = performance_difference(matrix[i][k], matrix[j][k])
                         w = preference_relation(
                             matrix[j][k],
                             matrix[i][k],
                             p[k],
                             q[k],
                         )
-                        z = dif(matrix[j][k], matrix[i][k])
-                        v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                        z = performance_difference(matrix[j][k], matrix[i][k])
+                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                         b.append(y)
                         c.append(x)
                         e.append(w)
@@ -1503,16 +1496,16 @@ if usetca != 1:
                             p[k],
                             q[k],
                         )
-                        y = dif(matrix[i][k], matrix[j][k])
+                        y = performance_difference(matrix[i][k], matrix[j][k])
                         w = preference_relation(
                             matrix[j][k],
                             matrix[i][k],
                             p[k],
                             q[k],
                         )
-                        z = dif(matrix[j][k], matrix[i][k])
-                        v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                        z = performance_difference(matrix[j][k], matrix[i][k])
+                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                         b.append(y)
                         c.append(x)
                         e.append(w)
@@ -1722,16 +1715,16 @@ if usetca != 1:
                             p[k],
                             q[k],
                         )
-                        y = dif(matrix[i][k], matrix[j][k])
+                        y = performance_difference(matrix[i][k], matrix[j][k])
                         w = preference_relation(
                             matrix[j][k],
                             matrix[i][k],
                             p[k],
                             q[k],
                         )
-                        z = dif(matrix[j][k], matrix[i][k])
-                        v = ind(pertinence[k], pertinence2[i][k], pertinence2[j][k])
-                        t = ind(pertinence[k], pertinence2[j][k], pertinence2[i][k])
+                        z = performance_difference(matrix[j][k], matrix[i][k])
+                        v = mean_pertinence(pertinence[k], pertinence2[i][k], pertinence2[j][k])
+                        t = mean_pertinence(pertinence[k], pertinence2[j][k], pertinence2[i][k])
                         b.append(y)
                         c.append(x)
                         e.append(w)
