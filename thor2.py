@@ -545,3 +545,92 @@ def performance_difference(a, b):
     Calculate the performance difference between two alternatives.
     """
     return a - b
+
+def build_pairwise_vectors(
+    performance_a,
+    performance_b,
+    base_pertinences,
+    pertinences_a,
+    pertinences_b,
+    preference_thresholds,
+    indifference_thresholds,
+):
+    """
+    Build the THOR2 pairwise comparison vectors for two alternatives.
+
+    Returns
+    -------
+    tuple
+        relations_ab,
+        differences_ab,
+        pertinences_ab,
+        relations_ba,
+        differences_ba,
+        pertinences_ba
+    """
+
+    relations_ab = []
+    differences_ab = []
+    pertinences_ab = []
+
+    relations_ba = []
+    differences_ba = []
+    pertinences_ba = []
+
+    for i in range(len(performance_a)):
+        relations_ab.append(
+            preference_relation(
+                performance_a[i],
+                performance_b[i],
+                preference_thresholds[i],
+                indifference_thresholds[i],
+            )
+        )
+
+        differences_ab.append(
+            performance_difference(
+                performance_a[i],
+                performance_b[i],
+            )
+        )
+
+        pertinences_ab.append(
+            mean_pertinence(
+                base_pertinences[i],
+                pertinences_a[i],
+                pertinences_b[i],
+            )
+        )
+
+        relations_ba.append(
+            preference_relation(
+                performance_b[i],
+                performance_a[i],
+                preference_thresholds[i],
+                indifference_thresholds[i],
+            )
+        )
+
+        differences_ba.append(
+            performance_difference(
+                performance_b[i],
+                performance_a[i],
+            )
+        )
+
+        pertinences_ba.append(
+            mean_pertinence(
+                base_pertinences[i],
+                pertinences_b[i],
+                pertinences_a[i],
+            )
+        )
+
+    return (
+        relations_ab,
+        differences_ab,
+        pertinences_ab,
+        relations_ba,
+        differences_ba,
+        pertinences_ba,
+    )

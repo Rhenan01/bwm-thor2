@@ -1,6 +1,7 @@
 import pytest
 
 from thor2 import (
+    build_pairwise_vectors,
     discordance_s1,
     discordance_s2,
     discordance_s3,
@@ -425,3 +426,61 @@ def test_performance_difference_negative():
     result = performance_difference(6.0, 10.0)
 
     assert result == pytest.approx(-4.0, abs=1e-9)
+
+def test_build_pairwise_vectors_reference_case():
+    (
+        relations_ab,
+        differences_ab,
+        pertinences_ab,
+        relations_ba,
+        differences_ba,
+        pertinences_ba,
+    ) = build_pairwise_vectors(
+        performance_a=[10.0, 8.0, 5.0],
+        performance_b=[5.0, 6.0, 8.0],
+        base_pertinences=[1.0, 1.0, 1.0],
+        pertinences_a=[0.8, 0.9, 1.0],
+        pertinences_b=[0.6, 0.7, 0.8],
+        preference_thresholds=[3.0, 3.0, 3.0],
+        indifference_thresholds=[1.0, 1.0, 1.0],
+    )
+
+    assert relations_ab == ["aPb", "aQb", "bQa"]
+    assert differences_ab == pytest.approx(
+        [5.0, 2.0, -3.0],
+        abs=1e-9,
+    )
+
+    assert pertinences_ab == pytest.approx(
+        [0.8, 0.8666666666666667, 0.9333333333333333],
+        abs=1e-9,
+    )
+
+    assert relations_ba == ["bPa", "bQa", "aQb"]
+    assert differences_ba == pytest.approx(
+        [-5.0, -2.0, 3.0],
+        abs=1e-9,
+    )
+
+    assert pertinences_ba == pytest.approx(
+        [0.8, 0.8666666666666667, 0.9333333333333333],
+        abs=1e-9,
+    )
+
+
+def test_pairwise_differences_are_opposites():
+    result = build_pairwise_vectors(
+        performance_a=[10.0, 4.0],
+        performance_b=[6.0, 9.0],
+        base_pertinences=[1.0, 1.0],
+        pertinences_a=[1.0, 1.0],
+        pertinences_b=[1.0, 1.0],
+        preference_thresholds=[3.0, 3.0],
+        indifference_thresholds=[1.0, 1.0],
+    )
+
+    differences_ab = result[1]
+    differences_ba = result[4]
+
+    for ab, ba in zip(differences_ab, differences_ba):
+        assert ab == pytest.approx(-ba, abs=1e-9)
