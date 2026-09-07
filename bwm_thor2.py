@@ -9,12 +9,7 @@ from aggregation import aggregate_weights
 from bwm import solve_bwm
 from thor2 import (
     build_pairwise_vectors,
-    discordance_s1,
-    discordance_s2,
-    discordance_s3,
-    scenario_s1,
-    scenario_s2,
-    scenario_s3,
+    evaluate_pair,
 )
 
 sg.theme("PythonPlus")
@@ -738,72 +733,22 @@ while meter < 1:
                     p,
                     q,
                 )
-                s1_ab = scenario_s1(
+                score_ab, score_ba = evaluate_pair(
                     c,
                     b,
                     g,
-                    weight,
-                    p,
-                    q,
-                )
-
-                s1_ba = scenario_s1(
                     e,
                     f,
                     h,
                     weight,
                     p,
                     q,
-                )
-                d1_ab = discordance_s1(
-                    b,
-                    c,
-                    g,
-                    weight,
-                    p,
-                    q,
                     d,
+                    scenario="s1",
                 )
 
-                d1_ba = discordance_s1(
-                    f,
-                    e,
-                    h,
-                    weight,
-                    p,
-                    q,
-                    d,
-                )
-                if (s1_ab == "dominates") and (s1_ba == "dominates"):
-                    if (d1_ab == 0.5) or (d1_ba == 0.5):
-                        matrixs1[i][j] = 0.5
-                        matrixs1[j][i] = 0.5
-                    else:
-                        matrixs1[i][j] = round(d1_ab, 3)
-                        matrixs1[j][i] = round(d1_ba, 3)
-                elif (s1_ab == "dominates") and (s1_ba != "dominates"):
-                    if (d1_ab != 0.5):
-                        matrixs1[i][j] = round(d1_ab, 3)
-                        matrixs1[j][i] = 0
-                    else:
-                        matrixs1[i][j] = 0.5
-                        matrixs1[j][i] = 0.5
-                elif (s1_ab != "dominates") and (s1_ba == "dominates"):
-                    if (d1_ba != 0.5):
-                        matrixs1[i][j] = 0
-                        matrixs1[j][i] = round(d1_ba, 3)
-                    else:
-                        matrixs1[i][j] = 0.5
-                        matrixs1[j][i] = matrixs1[i][j]
-                else:
-                    matrixs1[i][j] = 0.5
-                    matrixs1[j][i] = matrixs1[i][j]
-                c = [];
-                b = [];
-                e = [];
-                f = [];
-                g = [];
-                h = []
+                matrixs1[i][j] = score_ab
+                matrixs1[j][i] = score_ba 
     for i in range(alt):
         r1 = 0.0
         for j in range(alt):
@@ -898,72 +843,22 @@ while meter < 1:
                     p,
                     q,
                 )
-                s2_ab = scenario_s2(
+                score_ab, score_ba = evaluate_pair(
                     c,
                     b,
                     g,
-                    weight,
-                    p,
-                    q,
-                )
-
-                s2_ba = scenario_s2(
                     e,
                     f,
                     h,
                     weight,
                     p,
                     q,
-                )
-                d2_ab = discordance_s2(
-                    b,
-                    c,
-                    g,
-                    weight,
-                    p,
-                    q,
                     d,
+                    scenario="s2",
                 )
 
-                d2_ba = discordance_s2(
-                    f,
-                    e,
-                    h,
-                    weight,
-                    p,
-                    q,
-                    d,
-                )
-                if (s2_ab == "dominates") and (s2_ba == "dominates"):
-                    if (d2_ab == 0.5) or (d2_ba == 0.5):
-                        matrixs2[i][j] = 0.5
-                        matrixs2[j][i] = 0.5
-                    else:
-                        matrixs2[i][j] = round(d2_ab, 3)
-                        matrixs2[j][i] = round(d2_ba, 3)
-                elif (s2_ab == "dominates") and (s2_ba != "dominates"):
-                    if (d2_ab != 0.5):
-                        matrixs2[i][j] = round(d2_ab, 3)
-                        matrixs2[j][i] = 0
-                    else:
-                        matrixs2[i][j] = 0.5
-                        matrixs2[j][i] = 0.5
-                elif (s2_ab != "dominates") and (s2_ba == "dominates"):
-                    if (d2_ba != 0.5):
-                        matrixs2[i][j] = 0
-                        matrixs2[j][i] = round(d2_ba, 3)
-                    else:
-                        matrixs2[i][j] = 0.5
-                        matrixs2[j][i] = matrixs2[i][j]
-                else:
-                    matrixs2[i][j] = 0.5
-                    matrixs2[j][i] = matrixs2[i][j]
-                c = [];
-                b = [];
-                e = [];
-                f = [];
-                g = [];
-                h = []
+                matrixs2[i][j] = score_ab
+                matrixs2[j][i] = score_ba
     for i in range(alt):
         r2 = 0.0
         for j in range(alt):
@@ -1058,72 +953,22 @@ while meter < 1:
                     p,
                     q,
                 )
-                s3_ab = scenario_s3(
+                score_ab, score_ba = evaluate_pair(
                     c,
                     b,
                     g,
-                    weight,
-                    p,
-                    q,
-                )
-
-                s3_ba = scenario_s3(
                     e,
                     f,
                     h,
                     weight,
                     p,
                     q,
-                )
-                d3_ab = discordance_s3(
-                    b,
-                    c,
-                    g,
-                    weight,
-                    p,
-                    q,
                     d,
+                    scenario="s3",
                 )
 
-                d3_ba = discordance_s3(
-                    f,
-                    e,
-                    h,
-                    weight,
-                    p,
-                    q,
-                    d,
-                )
-                if (s3_ab == "dominates") and (s3_ba == "dominates"):
-                    if (d3_ab == 0.5) or (d3_ba == 0.5):
-                        matrixs3[i][j] = 0.5
-                        matrixs3[j][i] = 0.5
-                    else:
-                        matrixs3[i][j] = round(d3_ab, 3)
-                        matrixs3[j][i] = round(d3_ba, 3)
-                elif (s3_ab == "dominates") and (s3_ba != "dominates"):
-                    if (d3_ab != 0.5):
-                        matrixs3[i][j] = round(d3_ab, 3)
-                        matrixs3[j][i] = 0
-                    else:
-                        matrixs3[i][j] = 0.5
-                        matrixs3[j][i] = 0.5
-                elif (s3_ab != "dominates") and (s3_ba == "dominates"):
-                    if (d3_ba != 0.5):
-                        matrixs3[i][j] = 0
-                        matrixs3[j][i] = round(d3_ba, 3)
-                    else:
-                        matrixs3[i][j] = 0.5
-                        matrixs3[j][i] = matrixs3[i][j]
-                else:
-                    matrixs3[i][j] = 0.5
-                    matrixs3[j][i] = matrixs3[i][j]
-                c = [];
-                b = [];
-                e = [];
-                f = [];
-                g = [];
-                h = []
+                matrixs3[i][j] = score_ab
+                matrixs3[j][i] = score_ba
     for i in range(alt):
         r3 = 0.0
         for j in range(alt):
@@ -1239,70 +1084,22 @@ if usetca != 1:
                         p,
                         q,
                     )
-                    s1_ab = scenario_s1(
+                    score_ab, score_ba = evaluate_pair(
                         c,
                         b,
                         g,
-                        weight,
-                        p,
-                        q,
-                    )
-
-                    s1_ba = scenario_s1(
                         e,
                         f,
                         h,
                         weight,
                         p,
                         q,
-                    )
-                    d1_ab = discordance_s1(
-                        b,
-                        c,
-                        g,
-                        weight,
-                        p,
-                        q,
                         d,
+                        scenario="s1",
                     )
 
-                    d1_ba = discordance_s1(
-                        f,
-                        e,
-                        h,
-                        weight,
-                        p,
-                        q,
-                        d,
-                    )
-                    if (s1_ab == "dominates") and (s1_ba == "dominates"):
-                        if (d1_ab == 0.5) or (d1_ba == 0.5):
-                            matrixs1[i][j] = 0.5
-                            matrixs1[j][i] = 0.5
-                        else:
-                            matrixs1[i][j] = round(d1_ab, 3)
-                            matrixs1[j][i] = round(d1_ba, 3)
-                    elif (s1_ab == "dominates") and (s1_ba != "dominates"):
-                        if (d1_ab != 0.5):
-                            matrixs1[i][j] = round(d1_ab, 3)
-                            matrixs1[j][i] = 0
-                        else:
-                            matrixs1[i][j] = 0.5
-                            matrixs1[j][i] = 0.5
-                    elif (s1_ab != "dominates") and (s1_ba == "dominates"):
-                        if (d1_ba != 0.5):
-                            matrixs1[i][j] = 0
-                            matrixs1[j][i] = round(d1_ba, 3)
-                        else:
-                            matrixs1[i][j] = 0.5
-                            matrixs1[j][i] = matrixs1[i][j]
-                    else:
-                        matrixs1[i][j] = 0.5
-                        matrixs1[j][i] = matrixs1[i][j]
-                    c = [];
-                    b = [];
-                    e = [];
-                    f = []
+                    matrixs1[i][j] = score_ab
+                    matrixs1[j][i] = score_ba                  
         for i in range(alt):
             r1 = 0.0
             for j in range(alt):
@@ -1445,70 +1242,22 @@ if usetca != 1:
                         p,
                         q,
                     )
-                    s2_ab = scenario_s2(
+                    score_ab, score_ba = evaluate_pair(
                         c,
                         b,
                         g,
-                        weight,
-                        p,
-                        q,
-                    )
-
-                    s2_ba = scenario_s2(
                         e,
                         f,
                         h,
                         weight,
                         p,
                         q,
-                    )
-                    d2_ab = discordance_s2(
-                        b,
-                        c,
-                        g,
-                        weight,
-                        p,
-                        q,
                         d,
+                        scenario="s2",
                     )
 
-                    d2_ba = discordance_s2(
-                        f,
-                        e,
-                        h,
-                        weight,
-                        p,
-                        q,
-                        d,
-                    )
-                    if (s2_ab == "dominates") and (s2_ba == "dominates"):
-                        if (d2_ab == 0.5) or (d2_ba == 0.5):
-                            matrixs2[i][j] = 0.5
-                            matrixs2[j][i] = 0.5
-                        else:
-                            matrixs2[i][j] = round(d2_ab, 3)
-                            matrixs2[j][i] = round(d2_ba, 3)
-                    elif (s2_ab == "dominates") and (s2_ba != "dominates"):
-                        if (d2_ab != 0.5):
-                            matrixs2[i][j] = round(d2_ab, 3)
-                            matrixs2[j][i] = 0
-                        else:
-                            matrixs2[i][j] = 0.5
-                            matrixs2[j][i] = 0.5
-                    elif (s2_ab != "dominates") and (s2_ba == "dominates"):
-                        if (d2_ba != 0.5):
-                            matrixs2[i][j] = 0
-                            matrixs2[j][i] = round(d2_ba, 3)
-                        else:
-                            matrixs2[i][j] = 0.5
-                            matrixs2[j][i] = matrixs2[i][j]
-                    else:
-                        matrixs2[i][j] = 0.5
-                        matrixs2[j][i] = matrixs2[i][j]
-                    c = [];
-                    b = [];
-                    e = [];
-                    f = []
+                    matrixs2[i][j] = score_ab
+                    matrixs2[j][i] = score_ba        
         for i in range(alt):
             r2 = 0.0
             for j in range(alt):
@@ -1651,70 +1400,22 @@ if usetca != 1:
                         p,
                         q,
                     )
-                    s3_ab = scenario_s3(
+                    score_ab, score_ba = evaluate_pair(
                         c,
                         b,
                         g,
-                        weight,
-                        p,
-                        q,
-                    )
-
-                    s3_ba = scenario_s3(
                         e,
                         f,
                         h,
                         weight,
                         p,
                         q,
-                    )
-                    d3_ab = discordance_s3(
-                        b,
-                        c,
-                        g,
-                        weight,
-                        p,
-                        q,
                         d,
+                        scenario="s3",
                     )
 
-                    d3_ba = discordance_s3(
-                        f,
-                        e,
-                        h,
-                        weight,
-                        p,
-                        q,
-                        d,
-                    )
-                    if (s3_ab == "dominates") and (s3_ba == "dominates"):
-                        if (d3_ab == 0.5) or (d3_ba == 0.5):
-                            matrixs3[i][j] = 0.5
-                            matrixs3[j][i] = 0.5
-                        else:
-                            matrixs3[i][j] = round(d3_ab, 3)
-                            matrixs3[j][i] = round(d3_ba, 3)
-                    elif (s3_ab == "dominates") and (s3_ba != "dominates"):
-                        if (d3_ab != 0.5):
-                            matrixs3[i][j] = round(d3_ab, 3)
-                            matrixs3[j][i] = 0
-                        else:
-                            matrixs3[i][j] = 0.5
-                            matrixs3[j][i] = 0.5
-                    elif (s3_ab != "dominates") and (s3_ba == "dominates"):
-                        if (d3_ba != 0.5):
-                            matrixs3[i][j] = 0
-                            matrixs3[j][i] = round(d3_ba, 3)
-                        else:
-                            matrixs3[i][j] = 0.5
-                            matrixs3[j][i] = matrixs3[i][j]
-                    else:
-                        matrixs3[i][j] = 0.5
-                        matrixs3[j][i] = matrixs3[i][j]
-                    c = [];
-                    b = [];
-                    e = [];
-                    f = []
+                    matrixs3[i][j] = score_ab
+                    matrixs3[j][i] = score_ba
         for i in range(alt):
             r3 = 0.0
             for j in range(alt):
