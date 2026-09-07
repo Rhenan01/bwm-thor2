@@ -1,23 +1,20 @@
 import gc
-import FreeSimpleGUI as sg
-import numpy as np
-import matplotlib
-matplotlib.use("TkAgg")
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sys
 import textwrap
 
-from bwm import solve_bwm
+import FreeSimpleGUI as sg
+import numpy as np
+
 from aggregation import aggregate_weights
+from bwm import solve_bwm
 from thor2 import (
+    discordance_s1,
+    discordance_s2,
+    discordance_s3,
     preference_relation,
     scenario_s1,
     scenario_s2,
     scenario_s3,
-    discordance_s1,
-    discordance_s2,
-    discordance_s3,
 )
 
 sg.theme("PythonPlus")
@@ -108,7 +105,7 @@ while control1 > 0:
     else:
         num = int(num)
     if control1 > 0:
-        sg.Popup("Error", "All values ​​must be numeric.")
+        sg.Popup("Error", "All values must be numeric.")
 weight = [];
 weight2 = [];
 weight3 = [];
@@ -378,8 +375,10 @@ for decisor in range(1, d + 1):
                 window_BO_OW.close()
                 break
 
-            except:
-                sg.popup('❌ Please select a value from 1 to 9 for each comparison.')
+            except (TypeError, ValueError):
+                sg.popup(
+                    "❌ Please select a value from 1 to 9 for each comparison."
+                )
 
     try:
         weights, xi = solve_bwm(best_index, worst_index, final_bo, final_ow)
@@ -389,8 +388,10 @@ for decisor in range(1, d + 1):
                           f"📉 Consistency index ξ: {xi:.4f}",
                           title="BWM Results")
         all_weights.append(list(weights))
-    except Exception as e:
-        sg.popup_error(f"❌ Error solving BWM for DM#{decisor}:\n{e}")
+    except ValueError as e:
+        sg.popup_error(
+            f"❌ Error solving BWM for DM#{decisor}:\n{e}"
+        )
         sys.exit()
 
 geom_means = aggregate_weights(all_weights)
@@ -458,15 +459,20 @@ while test != "error":
             if float(dotcomma(values[j])) <= float(dotcomma(values[j + cri])):
                 greatercontrol += 1
         if control > 0 and greatercontrol > 0:
-            sg.Popup("The values ​​of p and q must be greater than or equal to 0 and the value of p must be greater than q.")
+            sg.Popup(
+                "The values of p and q must be greater than or equal to 0 "
+                "and the value of p must be greater than q."
+            )
         elif control > 0:
-            sg.Popup("The values ​​of p and q must be greater than or equal to 0")
+            sg.Popup(
+                "The values of p and q must be greater than or equal to 0"
+            )
         elif greatercontrol > 0:
             sg.Popup("The value of p must be greater than q.")
         else:
             test = "error"
     else:
-        sg.Popup("error", "Values ​​must be numeric.")
+        sg.Popup("error", "Values must be numeric.")
 p = []
 for j in range(cri):
     p.append(float(dotcomma(values[j])))
@@ -511,7 +517,7 @@ while control1 > 0:
                 if controller.isdigit():
                     control1 -= 1
     if control1 > 0:
-        sg.Popup("error", "Values ​​must be numeric.")
+        sg.Popup("error", "Values must be numeric.")
 d = []
 for i in range(cri):
     d.append(float(dotcomma(values[i])))
@@ -618,7 +624,7 @@ if usepert == 0:
             else:
                 test = "error"
         else:
-            sg.Popup("error", "Values ​​must be numeric.")
+            sg.Popup("error", "Values must be numeric.")
     for i in range(alt):
         for j in range(cri):
             pertinence2[i][j] = float(dotcomma(values[dic]))
@@ -676,7 +682,7 @@ while control1 > 0:
                 matrix[i][j] = float(dotcomma(values[dic]))
                 dic += 1
     else:
-        sg.Popup("error", "Values ​​must be numeric.")
+        sg.Popup("error", "Values must be numeric.")
 
 
 weight = def_weights
@@ -1437,9 +1443,8 @@ if usetca != 1:
                 if (criteria[weight3[meter - 1]]) not in cristotal:
                     cristotal.append(criteria[weight3[meter - 1]])
                 ver1 = 1
-        if meter != 0 and usetca != 1:
-            if ver1 != 1:
-                weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
+        if meter != 0 and usetca != 1 and ver1 != 1:
+            weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
         alternatives0 = []
         tca1 = 0
         ver1 = 0
@@ -1657,9 +1662,8 @@ if usetca != 1:
                 if (criteria[weight3[meter - 1]]) not in cristotal:
                     cristotal.append(criteria[weight3[meter - 1]])
                 ver2 = 1
-        if meter != 0 and usetca != 1:
-            if ver2 != 1:
-                weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
+        if meter != 0 and usetca != 1 and ver2 != 1:
+            weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
         alternatives0 = []
         tca2 = 0
         ver2 = 0
@@ -1877,9 +1881,8 @@ if usetca != 1:
                 if (criteria[weight3[meter - 1]]) not in cristotal:
                     cristotal.append(criteria[weight3[meter - 1]])
                 ver3 = 1
-        if meter != 0 and usetca != 1:
-            if ver3 != 1:
-                weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
+        if meter != 0 and usetca != 1 and ver3 != 1:
+            weight[weight3[meter - 1]] = weight4[weight3[meter - 1]]
         alternatives0 = []
         tca3 = 0
         ver3 = 0
@@ -2051,5 +2054,4 @@ layout_popup = [[sg.Text("The program has been terminated, thank you for using B
 window_popup = sg.Window('Good Bye', layout_popup)
 window_popup.read(timeout=1500)
 window_popup.close()
-plt.close("all")
 gc.collect()
