@@ -41,3 +41,232 @@ def preference_relation(a, b, preference_threshold, indifference_threshold):
         return "bQa"
 
     return "bPa"
+
+def scenario_s1(
+    relations,
+    differences,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+):
+    """
+    Evaluate dominance according to THOR2 scenario S1.
+
+    Parameters
+    ----------
+    relations : list[str]
+        Preference relations for each criterion.
+    differences : list[float]
+        Performance differences between alternatives.
+    pertinences : list[float]
+        Pertinence values associated with the comparison.
+    weights : list[float]
+        Criteria weights.
+    preference_thresholds : list[float]
+        Preference thresholds p.
+    indifference_thresholds : list[float]
+        Indifference thresholds q.
+
+    Returns
+    -------
+    str
+        "dominates" or "does not dominate".
+    """
+
+    support = 0.0
+    opposition = 0.0
+
+    for i in range(len(weights)):
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+    if support > opposition:
+        return "dominates"
+
+    return "does not dominate"
+
+
+def scenario_s2(
+    relations,
+    differences,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+):
+    """
+    Evaluate dominance according to THOR2 scenario S2.
+    """
+
+    support = 0.0
+    opposition = 0.0
+
+    for i in range(len(weights)):
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            support += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            opposition += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+    if support > opposition:
+        return "dominates"
+
+    return "does not dominate"
+
+
+def scenario_s3(
+    relations,
+    differences,
+    pertinences,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+):
+    """
+    Evaluate dominance according to THOR2 scenario S3.
+    """
+
+    support = 0.0
+    opposition = 0.0
+
+    for i in range(len(weights)):
+        relation = relations[i]
+
+        if relation == "aPb":
+            support += weights[i] * pertinences[i]
+
+        elif relation == "aQb":
+            support += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "aIb":
+            support += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bIa":
+            support += weights[i] * 0.5 * pertinences[i]
+
+        elif relation == "bQa":
+            opposition += abs(
+                weights[i]
+                * pertinences[i]
+                * (
+                    (
+                        (abs(differences[i]) - indifference_thresholds[i])
+                        / (
+                            preference_thresholds[i]
+                            - indifference_thresholds[i]
+                        )
+                    )
+                    * 0.5
+                    + 0.5
+                )
+            )
+
+        elif relation == "bPa":
+            opposition += weights[i] * pertinences[i]
+
+    if support > opposition:
+        return "dominates"
+
+    return "does not dominate"
