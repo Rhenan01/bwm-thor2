@@ -2,6 +2,7 @@ import pytest
 
 from thor2 import (
     build_pairwise_vectors,
+    build_scenario_matrix,
     discordance_s1,
     discordance_s2,
     discordance_s3,
@@ -566,6 +567,52 @@ def test_evaluate_pair_invalid_scenario():
             relations_ba=["bPa"],
             differences_ba=[-5.0],
             pertinences_ba=[1.0],
+            weights=[1.0],
+            preference_thresholds=[3.0],
+            indifference_thresholds=[1.0],
+            discordance_thresholds=[10.0],
+            scenario="invalid",
+        )
+
+def test_build_scenario_matrix_strict_preferences():
+    matrix = build_scenario_matrix(
+        performance_matrix=[
+            [10.0],
+            [5.0],
+            [0.0],
+        ],
+        base_pertinences=[1.0],
+        pertinence_matrix=[
+            [1.0],
+            [1.0],
+            [1.0],
+        ],
+        weights=[1.0],
+        preference_thresholds=[3.0],
+        indifference_thresholds=[1.0],
+        discordance_thresholds=[10.0],
+        scenario="s1",
+    )
+
+    assert matrix == [
+        [0.0, 1.0, 1.0],
+        [0, 0.0, 1.0],
+        [0, 0, 0.0],
+    ]
+
+
+def test_build_scenario_matrix_invalid_scenario():
+    with pytest.raises(ValueError):
+        build_scenario_matrix(
+            performance_matrix=[
+                [10.0],
+                [5.0],
+            ],
+            base_pertinences=[1.0],
+            pertinence_matrix=[
+                [1.0],
+                [1.0],
+            ],
             weights=[1.0],
             preference_thresholds=[3.0],
             indifference_thresholds=[1.0],

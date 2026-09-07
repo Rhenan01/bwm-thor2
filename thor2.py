@@ -768,3 +768,62 @@ def evaluate_pair(
         return 0.5, 0.5
 
     return 0.5, 0.5
+
+def build_scenario_matrix(
+    performance_matrix,
+    base_pertinences,
+    pertinence_matrix,
+    weights,
+    preference_thresholds,
+    indifference_thresholds,
+    discordance_thresholds,
+    scenario,
+):
+    """
+    Build the complete pairwise evaluation matrix for a THOR2 scenario.
+    """
+
+    number_of_alternatives = len(performance_matrix)
+
+    scenario_matrix = [
+        [0.0 for _ in range(number_of_alternatives)]
+        for _ in range(number_of_alternatives)
+    ]
+
+    for i in range(number_of_alternatives):
+        for j in range(i + 1, number_of_alternatives):
+            (
+                relations_ab,
+                differences_ab,
+                pertinences_ab,
+                relations_ba,
+                differences_ba,
+                pertinences_ba,
+            ) = build_pairwise_vectors(
+                performance_matrix[i],
+                performance_matrix[j],
+                base_pertinences,
+                pertinence_matrix[i],
+                pertinence_matrix[j],
+                preference_thresholds,
+                indifference_thresholds,
+            )
+
+            score_ab, score_ba = evaluate_pair(
+                relations_ab,
+                differences_ab,
+                pertinences_ab,
+                relations_ba,
+                differences_ba,
+                pertinences_ba,
+                weights,
+                preference_thresholds,
+                indifference_thresholds,
+                discordance_thresholds,
+                scenario=scenario,
+            )
+
+            scenario_matrix[i][j] = score_ab
+            scenario_matrix[j][i] = score_ba
+
+    return scenario_matrix
